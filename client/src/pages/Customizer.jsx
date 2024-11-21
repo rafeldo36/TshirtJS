@@ -74,9 +74,9 @@ const Customizer = () => {
   }
 
   const handleDecals = (type, result) => {
-    
+
     const decalType = DecalTypes[type];
-    
+
     state[decalType.stateProperty] = result;
 
     if (!activeFilterTab[decalType.filterTab]) {
@@ -141,7 +141,10 @@ const Customizer = () => {
           <motion.div
             className='absolute z-10 top-5 right-5'
             {...fadeAnimation}
-          >
+          ><button onClick={() => (state.isBackView = !state.isBackView)}>
+              Toggle View
+            </button>
+
             <CustomButton
               type='filled'
               title='Go back'
@@ -161,7 +164,7 @@ const Customizer = () => {
                 handleClick={() => handleActiveFilterTab(tab.name)}
               />
             ))}
-              <button className='download-btn' onClick={downloadCanvasToImage}>
+            <button className='download-btn' onClick={downloadCanvasToImage}>
               <img
                 src={download}
                 alt='download_image'

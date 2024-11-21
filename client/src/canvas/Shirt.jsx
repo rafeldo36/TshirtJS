@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { easing } from 'maath';
 import { useSnapshot } from 'valtio';
 import { useFrame } from '@react-three/fiber';
@@ -13,7 +13,9 @@ const Shirt = () => {
   const logoTexture = useTexture(snap.logoDecal);
   const fullTexture = useTexture(snap.fullDecal);
 
-  useFrame((state, delta) => easing.dampC(materials.lambert1.color,snap.color, 0.25, delta));
+  useFrame((state, delta) =>
+    easing.dampC(materials.lambert1.color, snap.color, 0.25, delta)
+  );
 
   const stateString = JSON.stringify(snap);
 
@@ -25,20 +27,32 @@ const Shirt = () => {
         material={materials.lambert1}
         material-roughness={1}
         dispose={null}
+        rotation={snap.isBackView ? [0, Math.PI, 0] : [0, 0, 0]} // Rotate the shirt 180° for backside
       >
         {snap.isFullTexture && (
           <Decal
             position={[0, 0, 0]}
             rotation={[0, 0, 0]}
-            scale={1}
+            scale={0.5}
             map={fullTexture}
           />
         )}
-        {snap.isLogoTexture && (
+        {snap.isLogoTexture && !snap.isBackView && ( // Front logo
           <Decal
             position={[0, 0.04, 0.15]}
             rotation={[0, 0, 0]}
-            scale={0.15}
+            scale={0.25}
+            map={logoTexture}
+            anisotropy={16}
+            depthTest={false}
+            depthWrite={true}
+          />
+        )}
+        {snap.isLogoTexture && snap.isBackView && ( // Back logo
+          <Decal
+            position={[0, 0.04, -0.15]} // Adjust position for the back
+            rotation={[0, 50, 0]}
+            scale={0.25}
             map={logoTexture}
             anisotropy={16}
             depthTest={false}
@@ -47,7 +61,7 @@ const Shirt = () => {
         )}
       </mesh>
     </group>
-  )
-}
+  );
+};
 
-export default Shirt
+export default Shirt;
